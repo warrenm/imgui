@@ -10,14 +10,34 @@
 #import <QuartzCore/CAMetalLayer.h>
 #import <simd/simd.h>
 
+@interface ImguiMetalBuffer : NSObject
+@property (nonatomic, strong) id<MTLBuffer> buffer;
+@property (nonatomic, assign) NSTimeInterval lastReuseTime;
+- (instancetype)initWithBuffer:(id<MTLBuffer>)buffer;
+@end
+
+@implementation ImguiMetalBuffer
+- (instancetype)initWithBuffer:(id<MTLBuffer>)buffer {
+    if ((self = [super init])) {
+        _buffer = buffer;
+        _lastReuseTime = [NSDate date].timeIntervalSince1970;
+    }
+    return self;
+}
+@end
+
 @interface ImguiMetalContext : NSObject
 @property (nonatomic, strong) CAMetalLayer *layer;
 @property (nonatomic, strong) id<MTLDevice> device;
 @property (nonatomic, strong) id<MTLCommandQueue> commandQueue;
 @property (nonatomic, strong) id<MTLDepthStencilState> depthStencilState;
-@property (nonatomic, strong, nullable) id<MTLTexture> fontTexture;
 @property (nonatomic, strong, nullable) id<MTLRenderPipelineState> renderPipelineState;
+@property (nonatomic, strong, nullable) id<MTLTexture> fontTexture;
+@property (nonatomic, strong) NSMutableArray<ImguiMetalBuffer *> *bufferCache;
+@property (nonatomic, assign) NSTimeInterval lastBufferCachePurge;
 - (instancetype)initWithMetalLayer:(CAMetalLayer *)layer;
+- (ImguiMetalBuffer *)dequeueReusableBufferOfLength:(NSUInteger)length;
+- (void)enqueueReusableBuffer:(ImguiMetalBuffer *)buffer;
 @end
 
 @implementation ImguiMetalContext
@@ -25,9 +45,50 @@
     if ((self = [super init])) {
         _layer = layer;
         _device = layer.device ?: MTLCreateSystemDefaultDevice();
+        _bufferCache = [NSMutableArray array];
+        _lastBufferCachePurge = [NSDate date].timeIntervalSince1970;
     }
     return self;
 }
+
+- (ImguiMetalBuffer *)dequeueReusableBufferOfLength:(NSUInteger)length {
+    NSTimeInterval now = [NSDate date].timeIntervalSince1970;
+    
+    // Purge old buffers that haven't been useful for a while
+    if (now - self.lastBufferCachePurge > 1.0) {
+        NSMutableArray *survivors = [NSMutableArray array];
+        for (ImguiMetalBuffer *candidate in self.bufferCache) {
+            if (candidate.lastReuseTime > self.lastBufferCachePurge) {
+                [survivors addObject:candidate];
+            }
+        }
+        self.bufferCache = [survivors mutableCopy];
+        self.lastBufferCachePurge = now;
+    }
+    
+    // See if we have a buffer we can reuse
+    ImguiMetalBuffer *bestCandidate = nil;
+    for (ImguiMetalBuffer *candidate in self.bufferCache) {
+        if (candidate.buffer.length >= length && (bestCandidate == nil || bestCandidate.lastReuseTime > candidate.lastReuseTime)) {
+            bestCandidate = candidate;
+        }
+    }
+    
+    if (bestCandidate != nil) {
+        [self.bufferCache removeObject:bestCandidate];
+        bestCandidate.lastReuseTime = now;
+        return bestCandidate;
+    }
+    
+    // No luck; make a new buffer
+    id<MTLBuffer> backing = [self.device newBufferWithLength:length options:MTLResourceStorageModeShared];
+    return [[ImguiMetalBuffer alloc] initWithBuffer:backing];
+}
+
+- (void)enqueueReusableBuffer:(ImguiMetalBuffer *)buffer {
+    [self.bufferCache addObject:buffer];
+}
+
 @end
 
 static ImguiMetalContext *sharedMetalContext = nil;
@@ -57,13 +118,13 @@ void ImGui_ImplMetal_NewFrame()
 }
 
 // Metal Render function.
-void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLRenderCommandEncoder> commandEncoder)
+void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLCommandBuffer> commandBuffer, id<MTLRenderCommandEncoder> commandEncoder)
 {
     // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
     ImGuiIO& io = ImGui::GetIO();
     int fb_width = (int)(draw_data->DisplaySize.x * io.DisplayFramebufferScale.x);
     int fb_height = (int)(draw_data->DisplaySize.y * io.DisplayFramebufferScale.y);
-    if (fb_width <= 0 || fb_height <= 0)
+    if (fb_width <= 0 || fb_height <= 0 || draw_data->CmdListsCount == 0)
         return;
     draw_data->ScaleClipRects(io.DisplayFramebufferScale);
     
@@ -97,26 +158,31 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLRenderCommandEn
     [commandEncoder setVertexBytes:&ortho_projection length:sizeof(ortho_projection) atIndex:1];
     
 #warning need buffer pool impl
-    id<MTLBuffer> vertexBuffer = [sharedMetalContext.device newBufferWithLength:1024 * 1024
-                                                                        options:MTLResourceStorageModeShared];
-    [commandEncoder setVertexBuffer:vertexBuffer offset:0 atIndex:0];
-    
-    id<MTLBuffer> indexBuffer  = [sharedMetalContext.device newBufferWithLength:1024 * 1024
-                                                                        options:MTLResourceStorageModeShared];
-    
-    size_t vertexBufferOffset = 0;
-    size_t indexBufferOffset = 0;
-    
+    size_t vertexBufferLength = 0;
+    size_t indexBufferLength = 0;
+    for (int n = 0; n < draw_data->CmdListsCount; n++) {
+        const ImDrawList* cmd_list = draw_data->CmdLists[n];
+        vertexBufferLength += cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
+        indexBufferLength += cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
+    }
+
+    ImguiMetalBuffer *vertexBuffer = [sharedMetalContext dequeueReusableBufferOfLength:vertexBufferLength];
+    ImguiMetalBuffer *indexBuffer = [sharedMetalContext dequeueReusableBufferOfLength:indexBufferLength];
+
     [commandEncoder setRenderPipelineState:sharedMetalContext.renderPipelineState];
 
+    [commandEncoder setVertexBuffer:vertexBuffer.buffer offset:0 atIndex:0];
+
+    size_t vertexBufferOffset = 0;
+    size_t indexBufferOffset = 0;
     ImVec2 pos = draw_data->DisplayPos;
     for (int n = 0; n < draw_data->CmdListsCount; n++)
     {
         const ImDrawList* cmd_list = draw_data->CmdLists[n];
         ImDrawIdx idx_buffer_offset = 0;
 
-        memcpy((char *)vertexBuffer.contents + vertexBufferOffset, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
-        memcpy((char *)indexBuffer.contents + indexBufferOffset, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
+        memcpy((char *)vertexBuffer.buffer.contents + vertexBufferOffset, cmd_list->VtxBuffer.Data, cmd_list->VtxBuffer.Size * sizeof(ImDrawVert));
+        memcpy((char *)indexBuffer.buffer.contents + indexBufferOffset, cmd_list->IdxBuffer.Data, cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx));
         
         [commandEncoder setVertexBufferOffset:vertexBufferOffset atIndex:0];
 
@@ -148,7 +214,7 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLRenderCommandEn
                     [commandEncoder drawIndexedPrimitives:MTLPrimitiveTypeTriangle
                                                indexCount:pcmd->ElemCount
                                                 indexType:sizeof(ImDrawIdx) == 2 ? MTLIndexTypeUInt16 : MTLIndexTypeUInt32
-                                              indexBuffer:indexBuffer
+                                              indexBuffer:indexBuffer.buffer
                                         indexBufferOffset:indexBufferOffset + idx_buffer_offset];
                 }
             }
@@ -158,6 +224,13 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLRenderCommandEn
         vertexBufferOffset += cmd_list->VtxBuffer.Size * sizeof(ImDrawVert);
         indexBufferOffset += cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
     }
+    
+    [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer>) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [sharedMetalContext enqueueReusableBuffer:vertexBuffer];
+            [sharedMetalContext enqueueReusableBuffer:indexBuffer];
+        });
+    }];
 }
 
 bool ImGui_ImplMetal_CreateFontsTexture()

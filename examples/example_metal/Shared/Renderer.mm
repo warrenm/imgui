@@ -281,7 +281,7 @@ static const NSUInteger MaxBuffersInFlight = 3;
         
         ImGui::Render();
         ImDrawData *drawData = ImGui::GetDrawData();
-        ImGui_ImplMetal_RenderDrawData(drawData, renderEncoder);
+        ImGui_ImplMetal_RenderDrawData(drawData, commandBuffer, renderEncoder);
         
         [renderEncoder popDebugGroup];
 
