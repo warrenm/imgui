@@ -35,7 +35,11 @@
     self.mtkView.delegate = self.renderer;
 
 #if TARGET_OS_OSX
-    self.trackingAreaToken = [self.view addTrackingRect:NSZeroRect owner:self userData:nil assumeInside:NO];
+    NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
+                                                                options:NSTrackingMouseMoved | NSTrackingInVisibleRect | NSTrackingActiveAlways
+                                                                  owner:self
+                                                               userInfo:nil];
+    [self.view addTrackingArea:trackingArea];
 #endif
 }
 
