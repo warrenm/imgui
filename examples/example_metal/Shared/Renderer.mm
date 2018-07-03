@@ -44,7 +44,7 @@ static const NSUInteger MaxBuffersInFlight = 3;
         
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        (void)ImGui::GetIO();
         
         ImGui::StyleColorsDark();
     }
@@ -64,19 +64,19 @@ static const NSUInteger MaxBuffersInFlight = 3;
 
     _mtlVertexDescriptor.attributes[VertexAttributePosition].format = MTLVertexFormatFloat3;
     _mtlVertexDescriptor.attributes[VertexAttributePosition].offset = 0;
-    _mtlVertexDescriptor.attributes[VertexAttributePosition].bufferIndex = BufferIndexMeshPositions;
+    _mtlVertexDescriptor.attributes[VertexAttributePosition].bufferIndex = BufferIndexMeshVertices;
 
+    _mtlVertexDescriptor.attributes[VertexAttributeNormal].format = MTLVertexFormatFloat3;
+    _mtlVertexDescriptor.attributes[VertexAttributeNormal].offset = 16;
+    _mtlVertexDescriptor.attributes[VertexAttributeNormal].bufferIndex = BufferIndexMeshVertices;
+    
     _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].format = MTLVertexFormatFloat2;
-    _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].offset = 0;
-    _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].bufferIndex = BufferIndexMeshGenerics;
+    _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].offset = 32;
+    _mtlVertexDescriptor.attributes[VertexAttributeTexcoord].bufferIndex = BufferIndexMeshVertices;
 
-    _mtlVertexDescriptor.layouts[BufferIndexMeshPositions].stride = 12;
-    _mtlVertexDescriptor.layouts[BufferIndexMeshPositions].stepRate = 1;
-    _mtlVertexDescriptor.layouts[BufferIndexMeshPositions].stepFunction = MTLVertexStepFunctionPerVertex;
-
-    _mtlVertexDescriptor.layouts[BufferIndexMeshGenerics].stride = 8;
-    _mtlVertexDescriptor.layouts[BufferIndexMeshGenerics].stepRate = 1;
-    _mtlVertexDescriptor.layouts[BufferIndexMeshGenerics].stepFunction = MTLVertexStepFunctionPerVertex;
+    _mtlVertexDescriptor.layouts[BufferIndexMeshVertices].stride = 40;
+    _mtlVertexDescriptor.layouts[BufferIndexMeshVertices].stepRate = 1;
+    _mtlVertexDescriptor.layouts[BufferIndexMeshVertices].stepFunction = MTLVertexStepFunctionPerVertex;
 
     id<MTLLibrary> defaultLibrary = [_device newDefaultLibrary];
 
@@ -85,7 +85,6 @@ static const NSUInteger MaxBuffersInFlight = 3;
     id <MTLFunction> fragmentFunction = [defaultLibrary newFunctionWithName:@"fragmentShader"];
 
     MTLRenderPipelineDescriptor *pipelineStateDescriptor = [[MTLRenderPipelineDescriptor alloc] init];
-    pipelineStateDescriptor.label = @"MyPipeline";
     pipelineStateDescriptor.sampleCount = view.sampleCount;
     pipelineStateDescriptor.vertexFunction = vertexFunction;
     pipelineStateDescriptor.fragmentFunction = fragmentFunction;
@@ -111,7 +110,7 @@ static const NSUInteger MaxBuffersInFlight = 3;
         id<MTLBuffer> dynamicUniformBuffer = [_device newBufferWithLength:512
                                                                   options:MTLResourceStorageModeShared];
 
-        dynamicUniformBuffer.label = @"UniformBuffer";
+        dynamicUniformBuffer.label = @"Uniform Buffer";
         _dynamicUniformBuffers[i] = dynamicUniformBuffer;
     }
 
@@ -120,8 +119,6 @@ static const NSUInteger MaxBuffersInFlight = 3;
 
 - (void)_loadAssets
 {
-    /// Load assets into metal objects
-
     NSError *error;
 
     MTKMeshBufferAllocator *metalAllocator = [[MTKMeshBufferAllocator alloc]
@@ -138,6 +135,7 @@ static const NSUInteger MaxBuffersInFlight = 3;
 
     mdlVertexDescriptor.attributes[VertexAttributePosition].name  = MDLVertexAttributePosition;
     mdlVertexDescriptor.attributes[VertexAttributeTexcoord].name  = MDLVertexAttributeTextureCoordinate;
+    mdlVertexDescriptor.attributes[VertexAttributeNormal].name  = MDLVertexAttributeNormal;
 
     mdlMesh.vertexDescriptor = mdlVertexDescriptor;
 
@@ -151,7 +149,7 @@ static const NSUInteger MaxBuffersInFlight = 3;
     }
 }
 
-- (void)_updateGameState
+- (void)_updateSceneState
 {
     simd_float4x4 baseModelViewMatrix = simd_mul(matrix4x4_translation(0, 0, -8), matrix4x4_rotation(_rotation, (simd_float3){ 0, 1, 0}));
     simd_float4x4 leftCubeModelView = simd_mul(baseModelViewMatrix, simd_mul(matrix4x4_translation(-3, 0, 0), matrix4x4_rotation(_rotation, (simd_float3){ 1, 1, 1})));
@@ -162,41 +160,19 @@ static const NSUInteger MaxBuffersInFlight = 3;
     
     leftUniforms->projectionMatrix = _projectionMatrix;
     leftUniforms->modelViewMatrix = leftCubeModelView;
+    leftUniforms->normalMatrix = leftCubeModelView; // This "works" as long as (1) there is no non-uniform scale, (2) we light in eye space, and (3) normals have a w coord of 0
     leftUniforms->color = (simd_float4){ 0.4, 0.4, 1, 1 };
 
     rightUniforms->projectionMatrix = _projectionMatrix;
     rightUniforms->modelViewMatrix = rightCubeModelView;
+    rightUniforms->normalMatrix = rightCubeModelView;
     rightUniforms->color = (simd_float4){ 1, 0.4, 0.4, 1 };
 
-    _rotation += .01;
+    _rotation += .015;
 }
 
 - (void)drawInMTKView:(nonnull MTKView *)view
 {
-    ImGuiIO &io = ImGui::GetIO();
-    io.DeltaTime = 1.0f / 60.0f;
-    io.DisplaySize.x = view.bounds.size.width;
-    io.DisplaySize.y = view.bounds.size.height;
-    
-#warning Need to use backing scaling factor instead of assuming 2x Retina
-    io.DisplayFramebufferScale.x = 2;
-    io.DisplayFramebufferScale.y = 2;
-    
-    NSPoint point = NSEvent.mouseLocation;
-    NSRect pointRect = NSMakeRect(point.x, point.y, 1, 1);
-    NSRect windowRect = [view.window convertRectFromScreen:pointRect];
-    point = NSMakePoint(windowRect.origin.x, windowRect.origin.y);
-    point = [view convertPoint:point fromView:nil];
-    point = NSMakePoint(point.x, view.bounds.size.height - point.y);
-    
-    NSUInteger pressedButtons = [NSEvent pressedMouseButtons];
-    bool leftButtonPressed = (pressedButtons & (1 << 0)) != 0;
-    bool rightButtonPressed = (pressedButtons & (1 << 1)) != 0;
-
-    io.MousePos = (ImVec2){ float(point.x), float(point.y) };
-    io.MouseDown[0] = leftButtonPressed;
-    io.MouseDown[1] = rightButtonPressed;
-
     dispatch_semaphore_wait(_inFlightSemaphore, DISPATCH_TIME_FOREVER);
 
     _uniformBufferIndex = (_uniformBufferIndex + 1) % MaxBuffersInFlight;
@@ -208,13 +184,13 @@ static const NSUInteger MaxBuffersInFlight = 3;
          dispatch_semaphore_signal(block_sema);
     }];
 
-    [self _updateGameState];
+    [self _updateSceneState];
 
     MTLRenderPassDescriptor* renderPassDescriptor = view.currentRenderPassDescriptor;
     
     static bool show_demo_window = true;
     static bool show_another_window = true;
-    static float clear_color[4] = { 0.45f, 0.55f, 0.6f, 1.0f };
+    static float clear_color[4] = { 0.28f, 0.36f, 0.5f, 1.0f };
 
     if(renderPassDescriptor != nil)
     {
@@ -262,6 +238,9 @@ static const NSUInteger MaxBuffersInFlight = 3;
         [renderEncoder popDebugGroup];
         
         [renderEncoder pushDebugGroup:@"Draw ImGui"];
+        
+        ImGuiIO &io = ImGui::GetIO();
+        io.DeltaTime = 1 / float(view.preferredFramesPerSecond ?: 60);
         
         ImGui_ImplMetal_NewFrame();
 
@@ -318,6 +297,17 @@ static const NSUInteger MaxBuffersInFlight = 3;
 {
     float aspect = size.width / (float)size.height;
     _projectionMatrix = matrix_perspective_right_hand(65.0f * (M_PI / 180.0f), aspect, 0.1f, 100.0f);
+    
+    ImGuiIO &io = ImGui::GetIO();
+    io.DisplaySize.x = view.bounds.size.width;
+    io.DisplaySize.y = view.bounds.size.height;
+    
+#if TARGET_OS_OSX
+    CGFloat framebufferScale = view.window.screen.backingScaleFactor ?: NSScreen.mainScreen.backingScaleFactor;
+#else
+    CGFloat framebufferScale = view.window.screen.scale ?: UIScreen.mainScreen.scale;
+#endif
+    io.DisplayFramebufferScale = ImVec2(framebufferScale, framebufferScale);
 }
 
 #pragma mark Matrix Math Utilities

@@ -1,8 +1,7 @@
 // ImGui Renderer for: Metal
 
-#include "imgui.h"
-#import <Metal/Metal.h>
-#import <QuartzCore/CAMetalLayer.h>
+@class CAMetalLayer;
+@protocol MTLRenderCommandEncoder;
 
 IMGUI_IMPL_API bool     ImGui_ImplMetal_Init(CAMetalLayer *layer);
 IMGUI_IMPL_API void     ImGui_ImplMetal_Shutdown();

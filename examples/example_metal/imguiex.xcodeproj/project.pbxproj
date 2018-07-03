@@ -7,13 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8307E7C920E9F9C900473790 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7C820E9F9C900473790 /* AppDelegate.m */; };
-		8307E7CC20E9F9C900473790 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7CB20E9F9C900473790 /* GameViewController.m */; };
+		8307E7CC20E9F9C900473790 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7CB20E9F9C900473790 /* ViewController.mm */; };
 		8307E7CF20E9F9C900473790 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7CD20E9F9C900473790 /* Main.storyboard */; };
 		8307E7D220E9F9C900473790 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7D020E9F9C900473790 /* LaunchScreen.storyboard */; };
-		8307E7D520E9F9C900473790 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7D420E9F9C900473790 /* main.m */; };
 		8307E7DE20E9F9C900473790 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7DD20E9F9C900473790 /* AppDelegate.m */; };
-		8307E7E120E9F9C900473790 /* GameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7E020E9F9C900473790 /* GameViewController.m */; };
 		8307E7E420E9F9C900473790 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7E220E9F9C900473790 /* Main.storyboard */; };
 		8307E7E720E9F9C900473790 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7E620E9F9C900473790 /* main.m */; };
 		8307E7E820E9F9C900473790 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7BC20E9F9C700473790 /* Renderer.mm */; };
@@ -22,14 +19,24 @@
 		8307E7EB20E9F9C900473790 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7BE20E9F9C700473790 /* Shaders.metal */; };
 		8307E7EC20E9F9C900473790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7BF20E9F9C900473790 /* Assets.xcassets */; };
 		8307E7ED20E9F9C900473790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7BF20E9F9C900473790 /* Assets.xcassets */; };
-		8307E7F820E9FA5900473790 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7F620E9FA5900473790 /* imgui_impl_metal.mm */; };
-		8307E7F920E9FA5900473790 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7F620E9FA5900473790 /* imgui_impl_metal.mm */; };
-		8307E80220E9FB7B00473790 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7FC20E9FB7B00473790 /* imgui_draw.cpp */; };
-		8307E80320E9FB7B00473790 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7FC20E9FB7B00473790 /* imgui_draw.cpp */; };
-		8307E80420E9FB7B00473790 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7FD20E9FB7B00473790 /* imgui.cpp */; };
-		8307E80520E9FB7B00473790 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7FD20E9FB7B00473790 /* imgui.cpp */; };
-		8307E80620E9FB7B00473790 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8307E80020E9FB7B00473790 /* imgui_demo.cpp */; };
-		8307E80720E9FB7B00473790 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8307E80020E9FB7B00473790 /* imgui_demo.cpp */; };
+		83BBE9DE20EB3FFC00295997 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7E620E9F9C900473790 /* main.m */; };
+		83BBE9DF20EB40AE00295997 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7DD20E9F9C900473790 /* AppDelegate.m */; };
+		83BBE9E020EB42D000295997 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7CB20E9F9C900473790 /* ViewController.mm */; };
+		83BBE9E220EB430000295997 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 83BBE9E120EB430000295997 /* Default-568h@2x.png */; };
+		83BBE9E520EB46B900295997 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9E420EB46B900295997 /* Metal.framework */; };
+		83BBE9E720EB46BD00295997 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9E620EB46BD00295997 /* MetalKit.framework */; };
+		83BBE9E920EB46C100295997 /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9E820EB46C100295997 /* ModelIO.framework */; };
+		83BBE9EC20EB471700295997 /* MetalKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9EA20EB471700295997 /* MetalKit.framework */; };
+		83BBE9ED20EB471700295997 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9EB20EB471700295997 /* Metal.framework */; };
+		83BBE9EF20EB471C00295997 /* ModelIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83BBE9EE20EB471C00295997 /* ModelIO.framework */; };
+		83BBE9FE20EB54D800295997 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83BBE9FD20EB54D800295997 /* imgui_impl_metal.mm */; };
+		83BBE9FF20EB54D800295997 /* imgui_impl_metal.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83BBE9FD20EB54D800295997 /* imgui_impl_metal.mm */; };
+		83BBEA0520EB54E700295997 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0120EB54E700295997 /* imgui_draw.cpp */; };
+		83BBEA0620EB54E700295997 /* imgui_draw.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0120EB54E700295997 /* imgui_draw.cpp */; };
+		83BBEA0720EB54E700295997 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0220EB54E700295997 /* imgui_demo.cpp */; };
+		83BBEA0820EB54E700295997 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0220EB54E700295997 /* imgui_demo.cpp */; };
+		83BBEA0920EB54E700295997 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0320EB54E700295997 /* imgui.cpp */; };
+		83BBEA0A20EB54E700295997 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0320EB54E700295997 /* imgui.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,29 +46,31 @@
 		8307E7BE20E9F9C700473790 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		8307E7BF20E9F9C900473790 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8307E7C420E9F9C900473790 /* imguiex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imguiex.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8307E7C720E9F9C900473790 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		8307E7C820E9F9C900473790 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		8307E7CA20E9F9C900473790 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		8307E7CB20E9F9C900473790 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
+		8307E7CA20E9F9C900473790 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		8307E7CB20E9F9C900473790 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		8307E7CE20E9F9C900473790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8307E7D120E9F9C900473790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8307E7D320E9F9C900473790 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8307E7D420E9F9C900473790 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		8307E7D320E9F9C900473790 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		8307E7DA20E9F9C900473790 /* imguiex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imguiex.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8307E7DC20E9F9C900473790 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8307E7DD20E9F9C900473790 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		8307E7DF20E9F9C900473790 /* GameViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GameViewController.h; sourceTree = "<group>"; };
-		8307E7E020E9F9C900473790 /* GameViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GameViewController.m; sourceTree = "<group>"; };
 		8307E7E320E9F9C900473790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		8307E7E520E9F9C900473790 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8307E7E520E9F9C900473790 /* Info-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		8307E7E620E9F9C900473790 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		8307E7F620E9FA5900473790 /* imgui_impl_metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = imgui_impl_metal.mm; path = ../../../imgui_impl_metal.mm; sourceTree = "<group>"; };
-		8307E7F720E9FA5900473790 /* imgui_impl_metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgui_impl_metal.h; path = ../../../imgui_impl_metal.h; sourceTree = "<group>"; };
-		8307E7FB20E9FB7B00473790 /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgui.h; path = ../../../../imgui.h; sourceTree = "<group>"; };
-		8307E7FC20E9FB7B00473790 /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_draw.cpp; path = ../../../../imgui_draw.cpp; sourceTree = "<group>"; };
-		8307E7FD20E9FB7B00473790 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui.cpp; path = ../../../../imgui.cpp; sourceTree = "<group>"; };
-		8307E7FF20E9FB7B00473790 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imconfig.h; path = ../../../../imconfig.h; sourceTree = "<group>"; };
-		8307E80020E9FB7B00473790 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_demo.cpp; path = ../../../../imgui_demo.cpp; sourceTree = "<group>"; };
+		83BBE9E120EB430000295997 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		83BBE9E420EB46B900295997 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
+		83BBE9E620EB46BD00295997 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = DEVELOPER_DIR; };
+		83BBE9E820EB46C100295997 /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/ModelIO.framework; sourceTree = DEVELOPER_DIR; };
+		83BBE9EA20EB471700295997 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = System/Library/Frameworks/MetalKit.framework; sourceTree = SDKROOT; };
+		83BBE9EB20EB471700295997 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
+		83BBE9EE20EB471C00295997 /* ModelIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ModelIO.framework; path = System/Library/Frameworks/ModelIO.framework; sourceTree = SDKROOT; };
+		83BBE9FC20EB54D800295997 /* imgui_impl_metal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgui_impl_metal.h; path = ../../imgui_impl_metal.h; sourceTree = "<group>"; };
+		83BBE9FD20EB54D800295997 /* imgui_impl_metal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = imgui_impl_metal.mm; path = ../../imgui_impl_metal.mm; sourceTree = "<group>"; };
+		83BBEA0020EB54E700295997 /* imgui.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgui.h; path = ../../imgui.h; sourceTree = "<group>"; };
+		83BBEA0120EB54E700295997 /* imgui_draw.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_draw.cpp; path = ../../imgui_draw.cpp; sourceTree = "<group>"; };
+		83BBEA0220EB54E700295997 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_demo.cpp; path = ../../imgui_demo.cpp; sourceTree = "<group>"; };
+		83BBEA0320EB54E700295997 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui.cpp; path = ../../imgui.cpp; sourceTree = "<group>"; };
+		83BBEA0420EB54E700295997 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imconfig.h; path = ../../imconfig.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +78,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83BBE9E920EB46C100295997 /* ModelIO.framework in Frameworks */,
+				83BBE9E720EB46BD00295997 /* MetalKit.framework in Frameworks */,
+				83BBE9E520EB46B900295997 /* Metal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +88,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83BBE9EF20EB471C00295997 /* ModelIO.framework in Frameworks */,
+				83BBE9EC20EB471700295997 /* MetalKit.framework in Frameworks */,
+				83BBE9ED20EB471700295997 /* Metal.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -85,26 +100,32 @@
 		8307E7B520E9F9C700473790 = {
 			isa = PBXGroup;
 			children = (
-				8307E7FA20E9FB5E00473790 /* imgui */,
-				8307E7BA20E9F9C700473790 /* imguiex Shared */,
-				8307E7C620E9F9C900473790 /* imguiex iOS */,
-				8307E7DB20E9F9C900473790 /* imguiex macOS */,
+				83BBE9F020EB544400295997 /* imgui */,
+				8307E7BA20E9F9C700473790 /* Shared */,
+				8307E7C620E9F9C900473790 /* iOS */,
+				8307E7DB20E9F9C900473790 /* macOS */,
 				8307E7C520E9F9C900473790 /* Products */,
+				83BBE9E320EB46B800295997 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
-		8307E7BA20E9F9C700473790 /* imguiex Shared */ = {
+		8307E7BA20E9F9C700473790 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				8307E7F720E9FA5900473790 /* imgui_impl_metal.h */,
-				8307E7F620E9FA5900473790 /* imgui_impl_metal.mm */,
+				83BBE9FC20EB54D800295997 /* imgui_impl_metal.h */,
+				83BBE9FD20EB54D800295997 /* imgui_impl_metal.mm */,
+				8307E7DC20E9F9C900473790 /* AppDelegate.h */,
+				8307E7DD20E9F9C900473790 /* AppDelegate.m */,
 				8307E7BB20E9F9C700473790 /* Renderer.h */,
 				8307E7BC20E9F9C700473790 /* Renderer.mm */,
+				8307E7CA20E9F9C900473790 /* ViewController.h */,
+				8307E7CB20E9F9C900473790 /* ViewController.mm */,
+				8307E7E620E9F9C900473790 /* main.m */,
 				8307E7BD20E9F9C700473790 /* ShaderTypes.h */,
 				8307E7BE20E9F9C700473790 /* Shaders.metal */,
 				8307E7BF20E9F9C900473790 /* Assets.xcassets */,
 			);
-			path = "imguiex Shared";
+			path = Shared;
 			sourceTree = "<group>";
 		};
 		8307E7C520E9F9C900473790 /* Products */ = {
@@ -116,45 +137,49 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8307E7C620E9F9C900473790 /* imguiex iOS */ = {
+		8307E7C620E9F9C900473790 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
-				8307E7C720E9F9C900473790 /* AppDelegate.h */,
-				8307E7C820E9F9C900473790 /* AppDelegate.m */,
-				8307E7CA20E9F9C900473790 /* GameViewController.h */,
-				8307E7CB20E9F9C900473790 /* GameViewController.m */,
+				83BBE9E120EB430000295997 /* Default-568h@2x.png */,
 				8307E7CD20E9F9C900473790 /* Main.storyboard */,
 				8307E7D020E9F9C900473790 /* LaunchScreen.storyboard */,
-				8307E7D320E9F9C900473790 /* Info.plist */,
-				8307E7D420E9F9C900473790 /* main.m */,
+				8307E7D320E9F9C900473790 /* Info-iOS.plist */,
 			);
-			path = "imguiex iOS";
+			path = iOS;
 			sourceTree = "<group>";
 		};
-		8307E7DB20E9F9C900473790 /* imguiex macOS */ = {
+		8307E7DB20E9F9C900473790 /* macOS */ = {
 			isa = PBXGroup;
 			children = (
-				8307E7DC20E9F9C900473790 /* AppDelegate.h */,
-				8307E7DD20E9F9C900473790 /* AppDelegate.m */,
-				8307E7DF20E9F9C900473790 /* GameViewController.h */,
-				8307E7E020E9F9C900473790 /* GameViewController.m */,
 				8307E7E220E9F9C900473790 /* Main.storyboard */,
-				8307E7E520E9F9C900473790 /* Info.plist */,
-				8307E7E620E9F9C900473790 /* main.m */,
+				8307E7E520E9F9C900473790 /* Info-macOS.plist */,
 			);
-			path = "imguiex macOS";
+			path = macOS;
 			sourceTree = "<group>";
 		};
-		8307E7FA20E9FB5E00473790 /* imgui */ = {
+		83BBE9E320EB46B800295997 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				8307E7FF20E9FB7B00473790 /* imconfig.h */,
-				8307E7FB20E9FB7B00473790 /* imgui.h */,
-				8307E7FD20E9FB7B00473790 /* imgui.cpp */,
-				8307E80020E9FB7B00473790 /* imgui_demo.cpp */,
-				8307E7FC20E9FB7B00473790 /* imgui_draw.cpp */,
+				83BBE9EE20EB471C00295997 /* ModelIO.framework */,
+				83BBE9EB20EB471700295997 /* Metal.framework */,
+				83BBE9EA20EB471700295997 /* MetalKit.framework */,
+				83BBE9E820EB46C100295997 /* ModelIO.framework */,
+				83BBE9E620EB46BD00295997 /* MetalKit.framework */,
+				83BBE9E420EB46B900295997 /* Metal.framework */,
 			);
-			path = imgui;
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		83BBE9F020EB544400295997 /* imgui */ = {
+			isa = PBXGroup;
+			children = (
+				83BBEA0420EB54E700295997 /* imconfig.h */,
+				83BBEA0020EB54E700295997 /* imgui.h */,
+				83BBEA0220EB54E700295997 /* imgui_demo.cpp */,
+				83BBEA0120EB54E700295997 /* imgui_draw.cpp */,
+				83BBEA0320EB54E700295997 /* imgui.cpp */,
+			);
+			name = imgui;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -236,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8307E7CF20E9F9C900473790 /* Main.storyboard in Resources */,
+				83BBE9E220EB430000295997 /* Default-568h@2x.png in Resources */,
 				8307E7EC20E9F9C900473790 /* Assets.xcassets in Resources */,
 				8307E7D220E9F9C900473790 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -258,14 +284,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				8307E7E820E9F9C900473790 /* Renderer.mm in Sources */,
-				8307E80220E9FB7B00473790 /* imgui_draw.cpp in Sources */,
-				8307E7CC20E9F9C900473790 /* GameViewController.m in Sources */,
-				8307E7D520E9F9C900473790 /* main.m in Sources */,
-				8307E7C920E9F9C900473790 /* AppDelegate.m in Sources */,
-				8307E80420E9FB7B00473790 /* imgui.cpp in Sources */,
+				8307E7CC20E9F9C900473790 /* ViewController.mm in Sources */,
+				83BBEA0520EB54E700295997 /* imgui_draw.cpp in Sources */,
+				83BBE9DF20EB40AE00295997 /* AppDelegate.m in Sources */,
+				83BBEA0920EB54E700295997 /* imgui.cpp in Sources */,
+				83BBEA0720EB54E700295997 /* imgui_demo.cpp in Sources */,
+				83BBE9FE20EB54D800295997 /* imgui_impl_metal.mm in Sources */,
 				8307E7EA20E9F9C900473790 /* Shaders.metal in Sources */,
-				8307E7F820E9FA5900473790 /* imgui_impl_metal.mm in Sources */,
-				8307E80620E9FB7B00473790 /* imgui_demo.cpp in Sources */,
+				83BBE9DE20EB3FFC00295997 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -273,15 +299,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83BBE9E020EB42D000295997 /* ViewController.mm in Sources */,
 				8307E7E920E9F9C900473790 /* Renderer.mm in Sources */,
-				8307E80320E9FB7B00473790 /* imgui_draw.cpp in Sources */,
-				8307E7E120E9F9C900473790 /* GameViewController.m in Sources */,
+				83BBEA0620EB54E700295997 /* imgui_draw.cpp in Sources */,
 				8307E7E720E9F9C900473790 /* main.m in Sources */,
+				83BBEA0A20EB54E700295997 /* imgui.cpp in Sources */,
+				83BBEA0820EB54E700295997 /* imgui_demo.cpp in Sources */,
+				83BBE9FF20EB54D800295997 /* imgui_impl_metal.mm in Sources */,
 				8307E7DE20E9F9C900473790 /* AppDelegate.m in Sources */,
-				8307E80520E9FB7B00473790 /* imgui.cpp in Sources */,
 				8307E7EB20E9F9C900473790 /* Shaders.metal in Sources */,
-				8307E7F920E9FA5900473790 /* imgui_impl_metal.mm in Sources */,
-				8307E80720E9FB7B00473790 /* imgui_demo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -425,8 +451,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M4KB9BV65V;
-				INFOPLIST_FILE = "imguiex iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				INFOPLIST_FILE = "$(SRCROOT)/iOS/Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -445,8 +471,8 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = M4KB9BV65V;
-				INFOPLIST_FILE = "imguiex iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
+				INFOPLIST_FILE = "$(SRCROOT)/iOS/Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -467,7 +493,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = M4KB9BV65V;
-				INFOPLIST_FILE = "imguiex macOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info-macOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -487,7 +513,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = M4KB9BV65V;
-				INFOPLIST_FILE = "imguiex macOS/Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/macOS/Info-macOS.plist";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",

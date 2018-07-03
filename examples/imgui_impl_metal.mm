@@ -6,6 +6,8 @@
 
 #include "imgui.h"
 #include "imgui_impl_metal.h"
+#import <Metal/Metal.h>
+#import <QuartzCore/CAMetalLayer.h>
 #import <simd/simd.h>
 
 @interface ImguiMetalContext : NSObject
@@ -137,6 +139,7 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLRenderCommandEn
                                                    .width = NSUInteger(clip_rect.z - clip_rect.x),
                                                    .height = NSUInteger(clip_rect.w - clip_rect.y) };
                     [commandEncoder setScissorRect:scissorRect];
+                    
 
                     // Bind texture, Draw
                     if (pcmd->TextureId != NULL) {
@@ -169,8 +172,11 @@ bool ImGui_ImplMetal_CreateFontsTexture()
                                                                                                 height:height
                                                                                              mipmapped:NO];
     textureDescriptor.usage = MTLTextureUsageShaderRead;
-#warning Can't use managed on iOS
+#if TARGET_OS_OSX
     textureDescriptor.storageMode = MTLStorageModeManaged;
+#else
+    textureDescriptor.storageMode = MTLStorageModeShared;
+#endif
     id <MTLTexture> texture = [sharedMetalContext.device newTextureWithDescriptor:textureDescriptor];
     [texture replaceRegion:MTLRegionMake2D(0, 0, width, height) mipmapLevel:0 withBytes:pixels bytesPerRow:width * 4];
     sharedMetalContext.fontTexture = texture;
