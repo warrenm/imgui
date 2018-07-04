@@ -3,7 +3,7 @@
 
 @implementation AppDelegate
 
-#if !TARGET_OS_IPHONE
+#if TARGET_OS_OSX
 - (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)sender {
     return YES;
 }

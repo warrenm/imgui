@@ -40,12 +40,12 @@ static const NSUInteger MaxBuffersInFlight = 3;
         [self _loadMetalWithView:view];
         [self _loadAssets];
         
-        ImGui_ImplMetal_Init((CAMetalLayer *)view.layer);
-        
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
         (void)ImGui::GetIO();
         
+        ImGui_ImplMetal_Init(_device);
+
         ImGui::StyleColorsDark();
     }
 
@@ -54,8 +54,6 @@ static const NSUInteger MaxBuffersInFlight = 3;
 
 - (void)_loadMetalWithView:(nonnull MTKView *)view;
 {
-    /// Load Metal state objects and initalize renderer dependent view properties
-
     view.depthStencilPixelFormat = MTLPixelFormatDepth32Float_Stencil8;
     view.colorPixelFormat = MTLPixelFormatBGRA8Unorm;
     view.sampleCount = 1;
@@ -174,7 +172,7 @@ static const NSUInteger MaxBuffersInFlight = 3;
 - (void)drawInMTKView:(nonnull MTKView *)view
 {
     dispatch_semaphore_wait(_inFlightSemaphore, DISPATCH_TIME_FOREVER);
-
+    
     _uniformBufferIndex = (_uniformBufferIndex + 1) % MaxBuffersInFlight;
 
     id <MTLCommandBuffer> commandBuffer = [_commandQueue commandBuffer];
@@ -241,8 +239,7 @@ static const NSUInteger MaxBuffersInFlight = 3;
         
         ImGuiIO &io = ImGui::GetIO();
         io.DeltaTime = 1 / float(view.preferredFramesPerSecond ?: 60);
-        
-        ImGui_ImplMetal_NewFrame();
+        ImGui_ImplMetal_NewFrame(renderPassDescriptor);
 
         {
             static float f = 0.0f;
