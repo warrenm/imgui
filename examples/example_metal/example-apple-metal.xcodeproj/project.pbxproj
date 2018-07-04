@@ -15,8 +15,6 @@
 		8307E7E720E9F9C900473790 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7E620E9F9C900473790 /* main.m */; };
 		8307E7E820E9F9C900473790 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7BC20E9F9C700473790 /* Renderer.mm */; };
 		8307E7E920E9F9C900473790 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7BC20E9F9C700473790 /* Renderer.mm */; };
-		8307E7EA20E9F9C900473790 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7BE20E9F9C700473790 /* Shaders.metal */; };
-		8307E7EB20E9F9C900473790 /* Shaders.metal in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7BE20E9F9C700473790 /* Shaders.metal */; };
 		8307E7EC20E9F9C900473790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7BF20E9F9C900473790 /* Assets.xcassets */; };
 		8307E7ED20E9F9C900473790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7BF20E9F9C900473790 /* Assets.xcassets */; };
 		83BBE9DE20EB3FFC00295997 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7E620E9F9C900473790 /* main.m */; };
@@ -42,16 +40,14 @@
 /* Begin PBXFileReference section */
 		8307E7BB20E9F9C700473790 /* Renderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Renderer.h; sourceTree = "<group>"; };
 		8307E7BC20E9F9C700473790 /* Renderer.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Renderer.mm; sourceTree = "<group>"; };
-		8307E7BD20E9F9C700473790 /* ShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShaderTypes.h; sourceTree = "<group>"; };
-		8307E7BE20E9F9C700473790 /* Shaders.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Shaders.metal; sourceTree = "<group>"; };
 		8307E7BF20E9F9C900473790 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8307E7C420E9F9C900473790 /* imguiex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imguiex.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8307E7C420E9F9C900473790 /* example-apple-metal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "example-apple-metal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8307E7CA20E9F9C900473790 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		8307E7CB20E9F9C900473790 /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
 		8307E7CE20E9F9C900473790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8307E7D120E9F9C900473790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8307E7D320E9F9C900473790 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
-		8307E7DA20E9F9C900473790 /* imguiex.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imguiex.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8307E7DA20E9F9C900473790 /* example-apple-metal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "example-apple-metal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8307E7DC20E9F9C900473790 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		8307E7DD20E9F9C900473790 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		8307E7E320E9F9C900473790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -121,8 +117,6 @@
 				8307E7CA20E9F9C900473790 /* ViewController.h */,
 				8307E7CB20E9F9C900473790 /* ViewController.mm */,
 				8307E7E620E9F9C900473790 /* main.m */,
-				8307E7BD20E9F9C700473790 /* ShaderTypes.h */,
-				8307E7BE20E9F9C700473790 /* Shaders.metal */,
 				8307E7BF20E9F9C900473790 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -131,8 +125,8 @@
 		8307E7C520E9F9C900473790 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8307E7C420E9F9C900473790 /* imguiex.app */,
-				8307E7DA20E9F9C900473790 /* imguiex.app */,
+				8307E7C420E9F9C900473790 /* example-apple-metal.app */,
+				8307E7DA20E9F9C900473790 /* example-apple-metal.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -185,9 +179,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8307E7C320E9F9C900473790 /* imguiex iOS */ = {
+		8307E7C320E9F9C900473790 /* example-apple-metal-ios */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8307E7F020E9F9C900473790 /* Build configuration list for PBXNativeTarget "imguiex iOS" */;
+			buildConfigurationList = 8307E7F020E9F9C900473790 /* Build configuration list for PBXNativeTarget "example-apple-metal-ios" */;
 			buildPhases = (
 				8307E7C020E9F9C900473790 /* Sources */,
 				8307E7C120E9F9C900473790 /* Frameworks */,
@@ -197,14 +191,14 @@
 			);
 			dependencies = (
 			);
-			name = "imguiex iOS";
+			name = "example-apple-metal-ios";
 			productName = "imguiex iOS";
-			productReference = 8307E7C420E9F9C900473790 /* imguiex.app */;
+			productReference = 8307E7C420E9F9C900473790 /* example-apple-metal.app */;
 			productType = "com.apple.product-type.application";
 		};
-		8307E7D920E9F9C900473790 /* imguiex macOS */ = {
+		8307E7D920E9F9C900473790 /* example-apple-metal-macos */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8307E7F320E9F9C900473790 /* Build configuration list for PBXNativeTarget "imguiex macOS" */;
+			buildConfigurationList = 8307E7F320E9F9C900473790 /* Build configuration list for PBXNativeTarget "example-apple-metal-macos" */;
 			buildPhases = (
 				8307E7D620E9F9C900473790 /* Sources */,
 				8307E7D720E9F9C900473790 /* Frameworks */,
@@ -214,9 +208,9 @@
 			);
 			dependencies = (
 			);
-			name = "imguiex macOS";
+			name = "example-apple-metal-macos";
 			productName = "imguiex macOS";
-			productReference = 8307E7DA20E9F9C900473790 /* imguiex.app */;
+			productReference = 8307E7DA20E9F9C900473790 /* example-apple-metal.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -236,7 +230,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 8307E7B920E9F9C700473790 /* Build configuration list for PBXProject "imguiex" */;
+			buildConfigurationList = 8307E7B920E9F9C700473790 /* Build configuration list for PBXProject "example-apple-metal" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -249,8 +243,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8307E7C320E9F9C900473790 /* imguiex iOS */,
-				8307E7D920E9F9C900473790 /* imguiex macOS */,
+				8307E7C320E9F9C900473790 /* example-apple-metal-ios */,
+				8307E7D920E9F9C900473790 /* example-apple-metal-macos */,
 			);
 		};
 /* End PBXProject section */
@@ -290,7 +284,6 @@
 				83BBEA0920EB54E700295997 /* imgui.cpp in Sources */,
 				83BBEA0720EB54E700295997 /* imgui_demo.cpp in Sources */,
 				83BBE9FE20EB54D800295997 /* imgui_impl_metal.mm in Sources */,
-				8307E7EA20E9F9C900473790 /* Shaders.metal in Sources */,
 				83BBE9DE20EB3FFC00295997 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -307,7 +300,6 @@
 				83BBEA0820EB54E700295997 /* imgui_demo.cpp in Sources */,
 				83BBE9FF20EB54D800295997 /* imgui_impl_metal.mm in Sources */,
 				8307E7DE20E9F9C900473790 /* AppDelegate.m in Sources */,
-				8307E7EB20E9F9C900473790 /* Shaders.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -457,8 +449,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.imgui.example.imguiex.imguiex;
-				PRODUCT_NAME = imguiex;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.imgui.example.example-apple-metal-ios";
+				PRODUCT_NAME = "example-apple-metal";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -477,8 +469,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = org.imgui.example.imguiex.imguiex;
-				PRODUCT_NAME = imguiex;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.imgui.example.example-apple-metal-ios";
+				PRODUCT_NAME = "example-apple-metal";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -499,8 +491,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = org.imgui.example.imguiex.imguiex;
-				PRODUCT_NAME = imguiex;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.imgui.example.example-apple-metal-macos";
+				PRODUCT_NAME = "example-apple-metal";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -519,8 +511,8 @@
 					"@executable_path/../Frameworks",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.13;
-				PRODUCT_BUNDLE_IDENTIFIER = org.imgui.example.imguiex.imguiex;
-				PRODUCT_NAME = imguiex;
+				PRODUCT_BUNDLE_IDENTIFIER = "org.imgui.example.example-apple-metal-macos";
+				PRODUCT_NAME = "example-apple-metal";
 				SDKROOT = macosx;
 			};
 			name = Release;
@@ -528,7 +520,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8307E7B920E9F9C700473790 /* Build configuration list for PBXProject "imguiex" */ = {
+		8307E7B920E9F9C700473790 /* Build configuration list for PBXProject "example-apple-metal" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8307E7EE20E9F9C900473790 /* Debug */,
@@ -537,7 +529,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8307E7F020E9F9C900473790 /* Build configuration list for PBXNativeTarget "imguiex iOS" */ = {
+		8307E7F020E9F9C900473790 /* Build configuration list for PBXNativeTarget "example-apple-metal-ios" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8307E7F120E9F9C900473790 /* Debug */,
@@ -546,7 +538,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8307E7F320E9F9C900473790 /* Build configuration list for PBXNativeTarget "imguiex macOS" */ = {
+		8307E7F320E9F9C900473790 /* Build configuration list for PBXNativeTarget "example-apple-metal-macos" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				8307E7F420E9F9C900473790 /* Debug */,
