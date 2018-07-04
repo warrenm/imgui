@@ -37,6 +37,7 @@
 		83BBEA0820EB54E700295997 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0220EB54E700295997 /* imgui_demo.cpp */; };
 		83BBEA0920EB54E700295997 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0320EB54E700295997 /* imgui.cpp */; };
 		83BBEA0A20EB54E700295997 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0320EB54E700295997 /* imgui.cpp */; };
+		83BBEA0E20EB826B00295997 /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0C20EB826B00295997 /* imgui_impl_osx.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,8 @@
 		83BBEA0220EB54E700295997 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_demo.cpp; path = ../../imgui_demo.cpp; sourceTree = "<group>"; };
 		83BBEA0320EB54E700295997 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui.cpp; path = ../../imgui.cpp; sourceTree = "<group>"; };
 		83BBEA0420EB54E700295997 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imconfig.h; path = ../../imconfig.h; sourceTree = "<group>"; };
+		83BBEA0B20EB826B00295997 /* imgui_impl_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgui_impl_osx.h; path = ../../imgui_impl_osx.h; sourceTree = "<group>"; };
+		83BBEA0C20EB826B00295997 /* imgui_impl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = imgui_impl_osx.mm; path = ../../imgui_impl_osx.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +115,8 @@
 		8307E7BA20E9F9C700473790 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				83BBEA0B20EB826B00295997 /* imgui_impl_osx.h */,
+				83BBEA0C20EB826B00295997 /* imgui_impl_osx.mm */,
 				83BBE9FC20EB54D800295997 /* imgui_impl_metal.h */,
 				83BBE9FD20EB54D800295997 /* imgui_impl_metal.mm */,
 				8307E7DC20E9F9C900473790 /* AppDelegate.h */,
@@ -299,6 +304,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				83BBEA0E20EB826B00295997 /* imgui_impl_osx.mm in Sources */,
 				83BBE9E020EB42D000295997 /* ViewController.mm in Sources */,
 				8307E7E920E9F9C900473790 /* Renderer.mm in Sources */,
 				83BBEA0620EB54E700295997 /* imgui_draw.cpp in Sources */,

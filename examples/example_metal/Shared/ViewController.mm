@@ -3,6 +3,10 @@
 #import "Renderer.h"
 #include "imgui.h"
 
+#if TARGET_OS_OSX
+#include "imgui_impl_osx.h"
+#endif
+
 @interface ViewController ()
 @property (nonatomic, readonly) MTKView *mtkView;
 @property (nonatomic, strong) Renderer *renderer;
@@ -33,47 +37,55 @@
     [self.renderer mtkView:self.mtkView drawableSizeWillChange:self.mtkView.bounds.size];
 
     self.mtkView.delegate = self.renderer;
-
+    
 #if TARGET_OS_OSX
+    // Add a tracking area in order to receive mouse events whenever the mouse is within the bounds of our view
     NSTrackingArea *trackingArea = [[NSTrackingArea alloc] initWithRect:NSZeroRect
                                                                 options:NSTrackingMouseMoved | NSTrackingInVisibleRect | NSTrackingActiveAlways
                                                                   owner:self
                                                                userInfo:nil];
     [self.view addTrackingArea:trackingArea];
+    
+    // If we want to receive key events, we either need to be in the responder chain of the key view,
+    // or else we can install a global monitor. The consequence of this heavy-handed approach is that
+    // we receive events for all controls, not just ImGui widgets. If we had native controls in our
+    // window, we'd want to be much more careful than just ingesting the complete key stream, though
+    // we do make an effort to be good citizens by passing along events when ImGui doesn't want to capture.
+    NSEventMask eventMask = NSEventMaskKeyDown | NSEventMaskKeyUp | NSEventMaskFlagsChanged | NSEventTypeScrollWheel;
+    [NSEvent addLocalMonitorForEventsMatchingMask:eventMask handler:^NSEvent * _Nullable(NSEvent *event) {
+        BOOL wantsCapture = ImGui_ImplOSX_HandleEvent(event, self.view);
+        if (event.type == NSEventTypeKeyDown && wantsCapture) {
+            return nil;
+        } else {
+            return event;
+        }
+        
+    }];
+    
+    ImGui_ImplOSX_Init();
 #endif
 }
 
 #if TARGET_OS_OSX
 
-- (void)updateIOWithMouseEvent:(NSEvent *)event {
-    NSPoint mousePoint = event.locationInWindow;
-    mousePoint = [self.mtkView convertPoint:mousePoint fromView:nil];
-    mousePoint = NSMakePoint(mousePoint.x, self.view.bounds.size.height - mousePoint.y);
-    
-    NSUInteger pressedButtons = NSEvent.pressedMouseButtons;
-    bool leftButtonPressed = (pressedButtons & (1 << 0)) != 0;
-    bool rightButtonPressed = (pressedButtons & (1 << 1)) != 0;
-    
-    ImGuiIO &io = ImGui::GetIO();
-    io.MousePos = ImVec2(mousePoint.x, mousePoint.y);
-    io.MouseDown[0] = leftButtonPressed;
-    io.MouseDown[1] = rightButtonPressed;
-}
-
 - (void)mouseMoved:(NSEvent *)event {
-    [self updateIOWithMouseEvent:event];
+    ImGui_ImplOSX_HandleEvent(event, self.view);
 }
 
 - (void)mouseDown:(NSEvent *)event {
-    [self updateIOWithMouseEvent:event];
+    ImGui_ImplOSX_HandleEvent(event, self.view);
 }
 
 - (void)mouseUp:(NSEvent *)event {
-    [self updateIOWithMouseEvent:event];
+    ImGui_ImplOSX_HandleEvent(event, self.view);
 }
 
 - (void)mouseDragged:(NSEvent *)event {
-    [self updateIOWithMouseEvent:event];
+    ImGui_ImplOSX_HandleEvent(event, self.view);
+}
+
+- (void)scrollWheel:(NSEvent *)event {
+    ImGui_ImplOSX_HandleEvent(event, self.view);
 }
 
 #elif TARGET_OS_IOS
