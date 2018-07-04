@@ -2,10 +2,11 @@
 
 // CHANGELOG
 // (minor and older changes stripped away, please see git history for details)
-//  2018-07-02: Metal: Added new Metal backend implementation
+//  2018-07-xx: Metal: Added new Metal backend implementation
 
 #include "imgui.h"
 #include "imgui_impl_metal.h"
+
 #import <Metal/Metal.h>
 #import <QuartzCore/CAMetalLayer.h>
 #import <simd/simd.h>
@@ -276,7 +277,7 @@ void ImGui_ImplMetal_NewFrame(MTLRenderPassDescriptor *renderPassDescriptor)
 void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLCommandBuffer> commandBuffer, id<MTLRenderCommandEncoder> commandEncoder)
 {
     // Avoid rendering when minimized, scale coordinates for retina displays (screen coordinates != framebuffer coordinates)
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     int fb_width = (int)(draw_data->DisplaySize.x * io.DisplayFramebufferScale.x);
     int fb_height = (int)(draw_data->DisplaySize.y * io.DisplayFramebufferScale.y);
     if (fb_width <= 0 || fb_height <= 0 || draw_data->CmdListsCount == 0)
@@ -391,7 +392,7 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* draw_data, id<MTLCommandBuffer> 
 bool ImGui_ImplMetal_CreateFontsTexture(id<MTLDevice> device)
 {
     // Build texture atlas
-    ImGuiIO& io = ImGui::GetIO();
+    ImGuiIO &io = ImGui::GetIO();
     unsigned char* pixels;
     int width, height;
     io.Fonts->GetTexDataAsRGBA32(&pixels, &width, &height);
@@ -416,13 +417,16 @@ bool ImGui_ImplMetal_CreateFontsTexture(id<MTLDevice> device)
 
 void ImGui_ImplMetal_DestroyFontsTexture()
 {
+    ImGuiIO& io = ImGui::GetIO();
+    g_sharedMetalContext.fontTexture = nil;
+    io.Fonts->TexID = nullptr;
 }
 
 bool ImGui_ImplMetal_CreateDeviceObjects(id<MTLDevice> device)
 {
     MTLDepthStencilDescriptor *depthStencilDescriptor = [[MTLDepthStencilDescriptor alloc] init];
-    depthStencilDescriptor.depthWriteEnabled = YES;
-    depthStencilDescriptor.depthCompareFunction = MTLCompareFunctionLessEqual;
+    depthStencilDescriptor.depthWriteEnabled = NO;
+    depthStencilDescriptor.depthCompareFunction = MTLCompareFunctionAlways;
     g_sharedMetalContext.depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
 
     ImGui_ImplMetal_CreateFontsTexture(device);

@@ -32,7 +32,7 @@
         abort();
     }
 
-    self.renderer = [[Renderer alloc] initWithMetalKitView:self.mtkView];
+    self.renderer = [[Renderer alloc] initWithView:self.mtkView];
 
     [self.renderer mtkView:self.mtkView drawableSizeWillChange:self.mtkView.bounds.size];
 
