@@ -4,7 +4,6 @@
 
 #include "imgui.h"
 #include "imgui_impl_metal.h"
-#include "imgui_impl_osx.h"
 
 @interface Renderer ()
 @property (nonatomic, strong) id <MTLDevice> device;
@@ -51,11 +50,7 @@
         id <MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
 
         [renderEncoder pushDebugGroup:@"Draw ImGui"];
-
-#if TARGET_OS_OSX
-        ImGui_ImplOSX_NewFrame(view);
-#endif
-
+        
         ImGuiIO &io = ImGui::GetIO();
         io.DeltaTime = 1 / float(view.preferredFramesPerSecond ?: 60);
         ImGui_ImplMetal_NewFrame(renderPassDescriptor);

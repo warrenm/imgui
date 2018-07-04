@@ -17,6 +17,7 @@
 		8307E7E920E9F9C900473790 /* Renderer.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7BC20E9F9C700473790 /* Renderer.mm */; };
 		8307E7EC20E9F9C900473790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7BF20E9F9C900473790 /* Assets.xcassets */; };
 		8307E7ED20E9F9C900473790 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8307E7BF20E9F9C900473790 /* Assets.xcassets */; };
+		83B910C620ED22CF0065F2E8 /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83B910C420ED22CF0065F2E8 /* imgui_impl_osx.mm */; };
 		83BBE9DE20EB3FFC00295997 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7E620E9F9C900473790 /* main.m */; };
 		83BBE9DF20EB40AE00295997 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7DD20E9F9C900473790 /* AppDelegate.m */; };
 		83BBE9E020EB42D000295997 /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 8307E7CB20E9F9C900473790 /* ViewController.mm */; };
@@ -35,7 +36,6 @@
 		83BBEA0820EB54E700295997 /* imgui_demo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0220EB54E700295997 /* imgui_demo.cpp */; };
 		83BBEA0920EB54E700295997 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0320EB54E700295997 /* imgui.cpp */; };
 		83BBEA0A20EB54E700295997 /* imgui.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0320EB54E700295997 /* imgui.cpp */; };
-		83BBEA0E20EB826B00295997 /* imgui_impl_osx.mm in Sources */ = {isa = PBXBuildFile; fileRef = 83BBEA0C20EB826B00295997 /* imgui_impl_osx.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +54,8 @@
 		8307E7E320E9F9C900473790 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		8307E7E520E9F9C900473790 /* Info-macOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-macOS.plist"; sourceTree = "<group>"; };
 		8307E7E620E9F9C900473790 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		83B910C420ED22CF0065F2E8 /* imgui_impl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = imgui_impl_osx.mm; path = ../../imgui_impl_osx.mm; sourceTree = "<group>"; };
+		83B910C520ED22CF0065F2E8 /* imgui_impl_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgui_impl_osx.h; path = ../../imgui_impl_osx.h; sourceTree = "<group>"; };
 		83BBE9E120EB430000295997 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		83BBE9E420EB46B900295997 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/Metal.framework; sourceTree = DEVELOPER_DIR; };
 		83BBE9E620EB46BD00295997 /* MetalKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MetalKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/MetalKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -68,8 +70,6 @@
 		83BBEA0220EB54E700295997 /* imgui_demo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui_demo.cpp; path = ../../imgui_demo.cpp; sourceTree = "<group>"; };
 		83BBEA0320EB54E700295997 /* imgui.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imgui.cpp; path = ../../imgui.cpp; sourceTree = "<group>"; };
 		83BBEA0420EB54E700295997 /* imconfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imconfig.h; path = ../../imconfig.h; sourceTree = "<group>"; };
-		83BBEA0B20EB826B00295997 /* imgui_impl_osx.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = imgui_impl_osx.h; path = ../../imgui_impl_osx.h; sourceTree = "<group>"; };
-		83BBEA0C20EB826B00295997 /* imgui_impl_osx.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = imgui_impl_osx.mm; path = ../../imgui_impl_osx.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,8 +111,8 @@
 		8307E7BA20E9F9C700473790 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
-				83BBEA0B20EB826B00295997 /* imgui_impl_osx.h */,
-				83BBEA0C20EB826B00295997 /* imgui_impl_osx.mm */,
+				83B910C520ED22CF0065F2E8 /* imgui_impl_osx.h */,
+				83B910C420ED22CF0065F2E8 /* imgui_impl_osx.mm */,
 				83BBE9FC20EB54D800295997 /* imgui_impl_metal.h */,
 				83BBE9FD20EB54D800295997 /* imgui_impl_metal.mm */,
 				8307E7DC20E9F9C900473790 /* AppDelegate.h */,
@@ -297,7 +297,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				83BBEA0E20EB826B00295997 /* imgui_impl_osx.mm in Sources */,
 				83BBE9E020EB42D000295997 /* ViewController.mm in Sources */,
 				8307E7E920E9F9C900473790 /* Renderer.mm in Sources */,
 				83BBEA0620EB54E700295997 /* imgui_draw.cpp in Sources */,
@@ -305,6 +304,7 @@
 				83BBEA0A20EB54E700295997 /* imgui.cpp in Sources */,
 				83BBEA0820EB54E700295997 /* imgui_demo.cpp in Sources */,
 				83BBE9FF20EB54D800295997 /* imgui_impl_metal.mm in Sources */,
+				83B910C620ED22CF0065F2E8 /* imgui_impl_osx.mm in Sources */,
 				8307E7DE20E9F9C900473790 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
