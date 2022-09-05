@@ -34,6 +34,8 @@
 #import <time.h>
 #import <Metal/Metal.h>
 
+#define IMGUI_USE_OBJC_ARC __has_feature(objc_arc)
+
 #pragma mark - Support classes
 
 // A wrapper around a MTLBuffer object that knows the last time it was reused
@@ -143,10 +145,15 @@ void ImGui_ImplMetal_NewFrame(MTLRenderPassDescriptor* renderPassDescriptor)
 {
     ImGui_ImplMetal_Data* bd = ImGui_ImplMetal_GetBackendData();
     IM_ASSERT(bd->SharedMetalContext != nil && "No Metal context. Did you call ImGui_ImplMetal_Init() ?");
-    bd->SharedMetalContext.framebufferDescriptor = [[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor];
+    FramebufferDescriptor *framebufferDescriptor = [[FramebufferDescriptor alloc] initWithRenderPassDescriptor:renderPassDescriptor];
+    bd->SharedMetalContext.framebufferDescriptor = framebufferDescriptor;
 
     if (bd->SharedMetalContext.depthStencilState == nil)
         ImGui_ImplMetal_CreateDeviceObjects(bd->SharedMetalContext.device);
+
+#if !IMGUI_USE_OBJC_ARC
+    [framebufferDescriptor release];
+#endif
 }
 
 static void ImGui_ImplMetal_SetupRenderState(ImDrawData* drawData, id<MTLCommandBuffer> commandBuffer,
@@ -293,6 +300,11 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* drawData, id<MTLCommandBuffer> c
         indexBufferOffset += (size_t)cmd_list->IdxBuffer.Size * sizeof(ImDrawIdx);
     }
 
+#if !IMGUI_USE_OBJC_ARC
+    [vertexBuffer retain];
+    [indexBuffer retain];
+#endif
+
     [commandBuffer addCompletedHandler:^(id<MTLCommandBuffer>)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -305,6 +317,10 @@ void ImGui_ImplMetal_RenderDrawData(ImDrawData* drawData, id<MTLCommandBuffer> c
                     [bd->SharedMetalContext.bufferCache addObject:indexBuffer];
                 }
             }
+#if !IMGUI_USE_OBJC_ARC
+            [vertexBuffer release];
+            [indexBuffer release];
+#endif
         });
     }];
 }
@@ -336,6 +352,10 @@ bool ImGui_ImplMetal_CreateFontsTexture(id<MTLDevice> device)
     bd->SharedMetalContext.fontTexture = texture;
     io.Fonts->SetTexID((__bridge void*)bd->SharedMetalContext.fontTexture); // ImTextureID == void*
 
+#if !IMGUI_USE_OBJC_ARC
+    [texture release];
+#endif
+
     return (bd->SharedMetalContext.fontTexture != nil);
 }
 
@@ -353,8 +373,14 @@ bool ImGui_ImplMetal_CreateDeviceObjects(id<MTLDevice> device)
     MTLDepthStencilDescriptor* depthStencilDescriptor = [[MTLDepthStencilDescriptor alloc] init];
     depthStencilDescriptor.depthWriteEnabled = NO;
     depthStencilDescriptor.depthCompareFunction = MTLCompareFunctionAlways;
-    bd->SharedMetalContext.depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
+    id<MTLDepthStencilState> depthStencilState = [device newDepthStencilStateWithDescriptor:depthStencilDescriptor];
+    bd->SharedMetalContext.depthStencilState = depthStencilState;
     ImGui_ImplMetal_CreateFontsTexture(device);
+
+#if !IMGUI_USE_OBJC_ARC
+    [depthStencilState release];
+    [depthStencilDescriptor release];
+#endif
 
     return true;
 }
@@ -373,11 +399,22 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
 {
     if ((self = [super init]))
     {
+#if !IMGUI_USE_OBJC_ARC
+        [buffer retain];
+#endif
         _buffer = buffer;
         _lastReuseTime = GetMachAbsoluteTimeInSeconds();
     }
     return self;
 }
+
+#if !IMGUI_USE_OBJC_ARC
+- (void)dealloc {
+    [_buffer release];
+    [super dealloc];
+}
+#endif
+
 @end
 
 #pragma mark - FramebufferDescriptor implementation
@@ -451,11 +488,11 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
         // Purge old buffers that haven't been useful for a while
         if (now - self.lastBufferCachePurge > 1.0)
         {
-            NSMutableArray* survivors = [NSMutableArray array];
+            NSMutableArray<MetalBuffer *> *survivors = [NSMutableArray array];
             for (MetalBuffer* candidate in self.bufferCache)
                 if (candidate.lastReuseTime > self.lastBufferCachePurge)
                     [survivors addObject:candidate];
-            self.bufferCache = [survivors mutableCopy];
+            self.bufferCache = survivors;
             self.lastBufferCachePurge = now;
         }
 
@@ -467,6 +504,9 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
 
         if (bestCandidate != nil)
         {
+#if !IMGUI_USE_OBJC_ARC
+            [[bestCandidate retain] autorelease];
+#endif
             [self.bufferCache removeObject:bestCandidate];
             bestCandidate.lastReuseTime = now;
             return bestCandidate;
@@ -475,7 +515,12 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
 
     // No luck; make a new buffer
     id<MTLBuffer> backing = [device newBufferWithLength:length options:MTLResourceStorageModeShared];
-    return [[MetalBuffer alloc] initWithBuffer:backing];
+    MetalBuffer *buffer = [[MetalBuffer alloc] initWithBuffer:backing];
+#if !IMGUI_USE_OBJC_ARC
+    [backing release];
+    [buffer autorelease];
+#endif
+    return buffer;
 }
 
 // Bilinear sampling is required by default. Set 'io.Fonts->Flags |= ImFontAtlasFlags_NoBakedLines' or 'style.AntiAliasedLinesUseTex = false' to allow point/nearest sampling.
@@ -529,9 +574,17 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
     id<MTLFunction> vertexFunction = [library newFunctionWithName:@"vertex_main"];
     id<MTLFunction> fragmentFunction = [library newFunctionWithName:@"fragment_main"];
 
+#if !IMGUI_USE_OBJC_ARC
+    [library release];
+#endif
+
     if (vertexFunction == nil || fragmentFunction == nil)
     {
-        NSLog(@"Error: failed to find Metal shader functions in library: %@", error);
+#if !IMGUI_USE_OBJC_ARC
+        [vertexFunction release];
+        [fragmentFunction release];
+#endif
+        NSLog(@"Error: failed to find Metal shader functions in library");
         return nil;
     }
 
@@ -569,7 +622,26 @@ void ImGui_ImplMetal_DestroyDeviceObjects()
     if (error != nil)
         NSLog(@"Error: failed to create Metal pipeline state: %@", error);
 
+#if !IMGUI_USE_OBJC_ARC
+    [vertexFunction release];
+    [fragmentFunction release];
+    [pipelineDescriptor release];
+    [renderPipelineState autorelease];
+#endif
+
     return renderPipelineState;
 }
+
+#if !IMGUI_USE_OBJC_ARC
+- (void)dealloc {
+    [_bufferCache release];
+    [_depthStencilState release];
+    [_fontTexture release];
+    [_framebufferDescriptor release];
+    [_renderPipelineStateCache release];
+    [_device release];
+    [super dealloc];
+}
+#endif
 
 @end
