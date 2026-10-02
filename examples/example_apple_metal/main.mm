@@ -17,6 +17,13 @@
 #import <Metal/Metal.h>
 #import <MetalKit/MetalKit.h>
 
+static float linear_from_srgb(float c)
+{
+    if (c <= 0.04045f)
+        return c / 12.92f;
+    return powf((c + 0.055f) / 1.055f, 2.4f);
+}
+
 #include "imgui.h"
 #include "imgui_impl_metal.h"
 #if TARGET_OS_OSX
@@ -94,6 +101,10 @@
     return (MTKView *)self.view;
 }
 
+- (BOOL)useSRGBFramebuffer {
+    return ImGui_ImplMetal_DeviceSupportsFramebufferFetch(self.device);
+}
+
 -(void)loadView
 {
     self.view = [[MTKView alloc] initWithFrame:CGRectMake(0, 0, 1200, 800)];
@@ -105,6 +116,14 @@
 
     self.mtkView.device = self.device;
     self.mtkView.delegate = self;
+    if (self.useSRGBFramebuffer) {
+        self.mtkView.colorPixelFormat = MTLPixelFormatBGRA8Unorm_sRGB;
+#if TARGET_OS_OSX
+        CGColorSpaceRef color_space = CGColorSpaceCreateWithName(kCGColorSpaceSRGB);
+        self.mtkView.colorspace = color_space;
+        CGColorSpaceRelease(color_space);
+#endif
+    }
 
 #if TARGET_OS_OSX
     ImGui_ImplOSX_Init(self.view);
@@ -187,7 +206,17 @@
     ImGui::Render();
     ImDrawData* draw_data = ImGui::GetDrawData();
 
-    renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+    if (self.useSRGBFramebuffer) {
+        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(linear_from_srgb(clear_color.x * clear_color.w),
+                                                                                linear_from_srgb(clear_color.y * clear_color.w),
+                                                                                linear_from_srgb(clear_color.z * clear_color.w),
+                                                                                clear_color.w);
+    } else {
+        renderPassDescriptor.colorAttachments[0].clearColor = MTLClearColorMake(clear_color.x * clear_color.w,
+                                                                                clear_color.y * clear_color.w,
+                                                                                clear_color.z * clear_color.w,
+                                                                                clear_color.w);
+    }
     id <MTLRenderCommandEncoder> renderEncoder = [commandBuffer renderCommandEncoderWithDescriptor:renderPassDescriptor];
     [renderEncoder pushDebugGroup:@"Dear ImGui rendering"];
     ImGui_ImplMetal_RenderDrawData(draw_data, commandBuffer, renderEncoder);

@@ -463,6 +463,24 @@ void ImGui_ImplMetal_Shutdown()
     platform_io.ClearRendererHandlers();
 }
 
+bool ImGui_ImplMetal_DeviceSupportsFramebufferFetch(id<MTLDevice> device)
+{
+#if TARGET_OS_SIMULATOR
+    IM_UNUSED(device);
+    return false;
+#else
+    if (@available(macOS 10.15, iOS 13.0, tvOS 13.0, *))
+        return [device supportsFamily:MTLGPUFamilyApple1];
+#if TARGET_OS_OSX || TARGET_OS_MACCATALYST
+    return false;
+#elif TARGET_OS_TV || TARGET_OS_IOS
+    return true;
+#else
+    return false;
+#endif
+#endif
+}
+
 #pragma mark - MetalBuffer implementation
 
 @implementation MetalBuffer
@@ -604,6 +622,10 @@ void ImGui_ImplMetal_Shutdown()
 - (id<MTLRenderPipelineState>)renderPipelineStateForFramebufferDescriptor:(FramebufferDescriptor*)descriptor device:(id<MTLDevice>)device
 {
     NSError* error = nil;
+    const bool is_srgb_render_target =
+        descriptor.colorPixelFormat == MTLPixelFormatRGBA8Unorm_sRGB ||
+        descriptor.colorPixelFormat == MTLPixelFormatBGRA8Unorm_sRGB;
+    const bool use_srgb_framebuffer_fetch = is_srgb_render_target && ImGui_ImplMetal_DeviceSupportsFramebufferFetch(device);
 
     NSString* shaderSource = @""
     "#include <metal_stdlib>\n"
@@ -625,6 +647,40 @@ void ImGui_ImplMetal_Shutdown()
     "    float4 color;\n"
     "};\n"
     "\n"
+    "half linear_from_srgb(half c) {\n"
+    "    if (c <= 0.04045h) {\n"
+    "        return c / 12.92h;\n"
+    "    } else {\n"
+    "        return powr((c + 0.055h) / 1.055h, 2.4h);\n"
+    "    }\n"
+    "}\n"
+    "\n"
+    "half3 linear_from_srgb(half3 srgb) {\n"
+    "    half r = linear_from_srgb(srgb.r);\n"
+    "    half g = linear_from_srgb(srgb.g);\n"
+    "    half b = linear_from_srgb(srgb.b);\n"
+    "    return half3(r, g, b);\n"
+    "}\n"
+    "\n"
+    "half4 linear_from_srgb(half4 srgb) {\n"
+    "    return half4(linear_from_srgb(srgb.rgb), srgb.a);\n"
+    "}\n"
+    "\n"
+    "half srgb_from_linear(half c) {\n"
+    "    if (c <= 0.0031308h) {\n"
+    "        return c * 12.92h;\n"
+    "    } else {\n"
+    "        return 1.055h * powr(c, 1.0h / 2.4h) - 0.055h;\n"
+    "    }\n"
+    "}\n"
+    "\n"
+    "half4 srgb_from_linear(half4 linear) {\n"
+    "    half r = srgb_from_linear(linear.r);\n"
+    "    half g = srgb_from_linear(linear.g);\n"
+    "    half b = srgb_from_linear(linear.b);\n"
+    "    return half4(r, g, b, linear.a);\n"
+    "}\n"
+    "\n"
     "vertex VertexOut vertex_main(VertexIn in                 [[stage_in]],\n"
     "                             constant Uniforms &uniforms [[buffer(1)]]) {\n"
     "    VertexOut out;\n"
@@ -639,6 +695,20 @@ void ImGui_ImplMetal_Shutdown()
     "                             sampler textureSampler [[sampler(0)]]) {\n"
     "    half4 texColor = texture.sample(textureSampler, in.texCoords);\n"
     "    return half4(in.color) * texColor;\n"
+    "}\n"
+    "\n"
+    "// Emulate blending in sRGB space with framebuffer fetch. Disable fixed-function blending when using this.\n"
+    "fragment half4 fragment_main_fbf(VertexOut in [[stage_in]],\n"
+    "                                 half4 destination [[color(0)]],\n"
+    "                                 texture2d<half, access::sample> texture [[texture(0)]],\n"
+    "                                 sampler textureSampler [[sampler(0)]]) {\n"
+    "    half4 out = half4(in.color) * texture.sample(textureSampler, in.texCoords);\n"
+    "    half transparency = 1.0h - out.a;\n"
+    "    half3 destinationSRGB = srgb_from_linear(destination).rgb;\n"
+    "    half3 blendedSRGB = out.rgb * out.a + destinationSRGB * transparency;\n"
+    "    half3 blendedLinear = linear_from_srgb(blendedSRGB);\n"
+    "    half blendedAlpha = out.a + destination.a * transparency;\n"
+    "    return half4(blendedLinear, blendedAlpha);\n"
     "}\n";
 
     id<MTLLibrary> library = [device newLibraryWithSource:shaderSource options:nil error:&error];
@@ -649,7 +719,8 @@ void ImGui_ImplMetal_Shutdown()
     }
 
     id<MTLFunction> vertexFunction = [library newFunctionWithName:@"vertex_main"];
-    id<MTLFunction> fragmentFunction = [library newFunctionWithName:@"fragment_main"];
+    NSString* fragmentFunctionName = use_srgb_framebuffer_fetch ? @"fragment_main_fbf" : @"fragment_main";
+    id<MTLFunction> fragmentFunction = [library newFunctionWithName:fragmentFunctionName];
 
     if (vertexFunction == nil || fragmentFunction == nil)
     {
@@ -677,7 +748,7 @@ void ImGui_ImplMetal_Shutdown()
     pipelineDescriptor.vertexDescriptor = vertexDescriptor;
     pipelineDescriptor.rasterSampleCount = self.framebufferDescriptor.sampleCount;
     pipelineDescriptor.colorAttachments[0].pixelFormat = [self.framebufferDescriptor colorPixelFormatAtIndex:0];
-    pipelineDescriptor.colorAttachments[0].blendingEnabled = YES;
+    pipelineDescriptor.colorAttachments[0].blendingEnabled = !use_srgb_framebuffer_fetch;
     pipelineDescriptor.colorAttachments[0].rgbBlendOperation = MTLBlendOperationAdd;
     pipelineDescriptor.colorAttachments[0].sourceRGBBlendFactor = MTLBlendFactorSourceAlpha;
     pipelineDescriptor.colorAttachments[0].destinationRGBBlendFactor = MTLBlendFactorOneMinusSourceAlpha;

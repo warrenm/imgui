@@ -42,6 +42,9 @@ IMGUI_IMPL_API void ImGui_ImplMetal_DestroyDeviceObjects();
 // (Advanced) Use e.g. if you need to precisely control the timing of texture updates (e.g. for staged rendering), by setting ImDrawData::Textures = nullptr to handle this manually.
 IMGUI_IMPL_API void ImGui_ImplMetal_UpdateTexture(ImTextureData* tex);
 
+// Use to test for the presence of frambuffer fetch and programmable blending. Enables more accurate colors when rendering to an sRGB render target.
+IMGUI_IMPL_API bool ImGui_ImplMetal_DeviceSupportsFramebufferFetch(id<MTLDevice> device);
+
 #endif
 
 //-----------------------------------------------------------------------------
